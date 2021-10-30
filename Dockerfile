@@ -1,4 +1,4 @@
-FROM archlinux:base-devel-20210131.0.14634
+FROM archlinux
 LABEL maintainer="hendry@iki.fi"
 
 RUN useradd -m dev
@@ -10,37 +10,27 @@ RUN pacman --cachedir /tmp -Syu --noconfirm \
 	base-devel \
 	bash \
 	git \
-	go \
-	gopls \
-	python \
+	nodejs \
+	npm \
+	jq \
 	starship \
 	sudo \
+	prettier \
 	tar \
 	tmux \
-	vim \
+	neovim \
 	&& rm -rf /tmp/*
-
-# python annoyingly needed for UltiSnips
 
 USER dev
 ENV TERM alacritty
 
-ENV HOME /home/dev
-ENV GOPATH $HOME/go
-ENV PATH $GOPATH/bin:$PATH
-
-RUN git clone --depth 1 https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
-RUN git clone --depth 1 https://github.com/buoto/gotests-vim.git ~/.vim/pack/plugins/start/gotests-vim
-RUN git clone --depth 1 https://github.com/kien/ctrlp.vim ~/.vim/pack/plugins/start/ctrlp.vim
-RUN git clone --depth 1 https://github.com/SirVer/ultisnips ~/.vim/pack/plugins/start/ultisnips
-
-RUN vim -esN +GoInstallBinaries +q
-
-RUN go get github.com/go-delve/delve/cmd/dlv
-RUN go get github.com/cweill/gotests/...
-
-COPY --chown=dev:dev vimrc /home/dev/.vimrc
+COPY --chown=dev:dev vimrc /home/dev/.config/nvim/init.vim
 COPY --chown=dev:dev bashrc /home/dev/.bashrc
+
+RUN sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+RUN nvim --headless +PlugInstall +qa
+RUN nvim +"CocInstall coc-tsserver coc-json" +qall
 
 WORKDIR /proj
 

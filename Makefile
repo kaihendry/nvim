@@ -1,11 +1,11 @@
 PROJDIR=$(shell pwd)
-IMAGE=hendry/goide
+IMAGE=hendry/js-ide
 
 # run goide in present working directory
 run:
 	docker container run --rm --interactive  \
 	  --tty \
-	  --name goide \
+	  --name jde-ide \
 	  --mount type=bind,source="$(PROJDIR)",target="/proj" \
 	  $(IMAGE)
 .PHONY: run
