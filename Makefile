@@ -1,11 +1,11 @@
 PROJDIR=$(shell pwd)
-IMAGE=hendry/js-ide
+IMAGE=hendry/js-nvim
 
 # run goide in present working directory
 run:
 	docker container run --rm --interactive  \
 	  --tty \
-	  --name jde-ide \
+	  --name js-nvim \
 	  --mount type=bind,source="$(PROJDIR)",target="/proj" \
 	  $(IMAGE)
 .PHONY: run

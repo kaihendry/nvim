@@ -19,6 +19,7 @@ RUN pacman --cachedir /tmp -Syu --noconfirm \
 	tar \
 	tmux \
 	neovim \
+	yamllint \
 	&& rm -rf /tmp/*
 
 USER dev
@@ -30,7 +31,7 @@ COPY --chown=dev:dev bashrc /home/dev/.bashrc
 RUN sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 RUN nvim --headless +PlugInstall +qa
-RUN nvim +"CocInstall coc-tsserver coc-json" +qall
+RUN nvim +"CocInstall coc-tsserver coc-json coc-yaml coc-prettier" +qall
 
 WORKDIR /proj
 
