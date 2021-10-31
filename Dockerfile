@@ -31,9 +31,8 @@ COPY --chown=dev:dev bashrc /home/dev/.bashrc
 RUN sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 RUN nvim --headless +PlugInstall +qa
-
 # Verify they are installed with ~/.config/coc/extensions/package.json
-nvim --headless +'CocInstall -sync coc-tsserver coc-json coc-yaml coc-eslint coc-prettier' +qall
+RUN nvim --headless +'CocInstall -sync coc-tsserver coc-json coc-yaml coc-eslint coc-prettier' +qall
 
 WORKDIR /proj
 
