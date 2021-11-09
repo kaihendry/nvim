@@ -1,10 +1,7 @@
 FROM archlinux
 LABEL maintainer="hendry@iki.fi"
 
-ARG BRANCH="master"
 ARG COMMIT=""
-LABEL branch=${BRANCH}
-LABEL commit=${COMMIT}
 
 RUN useradd -m dev
 RUN echo "dev ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -45,7 +42,6 @@ COPY --chown=dev:dev bashrc /home/dev/.bashrc
 
 WORKDIR /src
 
-ENV COMMIT_SHA=${COMMIT}
-ENV COMMIT_BRANCH=${BRANCH}
+ENV COMMIT=${COMMIT}
 
 ENTRYPOINT [ "bash" ]
