@@ -1,12 +1,12 @@
-PROJDIR=$(shell pwd)
+PRJSRC=$(shell pwd)
 IMAGE=hendry/js-nvim
 
-# run goide in present working directory
+# alias je='f(){ docker run -it --rm -v $(pwd):/proj hendry/js-nvim; unset -f f; }; f'
 run:
 	docker container run --rm --interactive  \
 	  --tty \
 	  --name js-nvim \
-	  --mount type=bind,source="$(PROJDIR)",target="/proj" \
+	  --mount type=bind,source="$(PRJSRC)",target="/src" \
 	  $(IMAGE)
 .PHONY: run
 

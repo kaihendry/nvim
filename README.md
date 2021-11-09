@@ -1,6 +1,6 @@
 # Goal
 
-To edit AWS CDK with some sanity.
+To edit [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-javascript.html) with some sanity.
 
 # Blog
 
