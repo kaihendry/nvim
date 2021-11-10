@@ -1,11 +1,11 @@
 PRJSRC=$(shell pwd)
-IMAGE=hendry/js-nvim
+IMAGE=hendry/nvim
 
-# alias je='f(){ docker run -it --rm -v $(pwd):/proj hendry/js-nvim; unset -f f; }; f'
+# alias je='f(){ docker run -it --rm -v $(pwd):/proj hendry/nvim; unset -f f; }; f'
 run:
 	docker container run --rm --interactive  \
 	  --tty \
-	  --name js-nvim \
+	  --name nvim \
 	  --mount type=bind,source="$(PRJSRC)",target="/src" \
 	  $(IMAGE)
 .PHONY: run

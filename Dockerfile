@@ -5,38 +5,29 @@ ARG COMMIT=""
 
 RUN useradd -m dev
 RUN echo "dev ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
 RUN sed -i "s/#Color/Color/" /etc/pacman.conf
 
-RUN pacman --cachedir /tmp -Syu --noconfirm \
-	base-devel \
+RUN pacman -Syu --needed --noconfirm git sudo base-devel
+
+USER dev
+
+RUN cd /tmp && git clone https://aur.archlinux.org/yay.git \
+  && cd yay \
+  && makepkg -sri --needed --noconfirm
+
+RUN yay --cachedir /tmp -Syu --noconfirm \
 	bash \
-	git \
 	nodejs \
 	npm \
 	jq \
-	sudo \
-	prettier \
-	tar \
-	tmux \
-	neovim \
+	neovim-nightly-bin \
+	typescript-language-server \
 	yamllint \
-	&& rm -rf /tmp/*
+	&& sudo rm -rf /tmp/*
 
-USER dev
-ENV TERM alacritty
+COPY --chown=dev:dev nvim /home/dev/.config/nvim
 
-RUN git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- /home/dev/.local/share/nvim/site/pack/packer/start/packer.nvim
-
-RUN cd /home/dev && \
-	git init && \
-	git remote add -f origin https://github.com/kaihendry/dotfiles.git && \
-	git config core.sparseCheckout true
-
-COPY --chown=dev:dev sparse-checkout /home/dev/.git/info/sparse-checkout
-
-RUN cd /home/dev && git pull origin master
+RUN INSTALL=1 nvim --headless +'autocmd User PackerComplete sleep 100m | qall' +PackerSync
 
 COPY --chown=dev:dev bashrc /home/dev/.bashrc
 
