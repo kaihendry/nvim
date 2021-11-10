@@ -16,12 +16,12 @@ RUN cd /tmp && git clone https://aur.archlinux.org/yay.git \
   && makepkg -sri --needed --noconfirm
 
 RUN yay --cachedir /tmp -Syu --noconfirm \
-	bash \
 	nodejs \
 	npm \
 	jq \
 	neovim-nightly-bin \
-	typescript-language-server \
+	write-good \
+	typescript-language-server-bin \
 	yamllint \
 	&& sudo rm -rf /tmp/*
 
