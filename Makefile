@@ -10,6 +10,10 @@ run:
 	  $(IMAGE)
 .PHONY: run
 
+sync:
+	cp -r ~/.config/nvim/. nvim
+.PHONY: sync
+
 # update the docker image
 update:
 	docker pull $(IMAGE)
@@ -17,5 +21,5 @@ update:
 
 # build the docker image
 build:
-	docker build -t $(IMAGE) .
+	docker build -t $(IMAGE) --build-arg COMMIT=$(shell git describe --always) .
 .PHONY: build
