@@ -18,8 +18,8 @@ vim.api.nvim_exec(
 local use = require('packer').use
 require('packer').startup(function()
 	use 'wbthomason/packer.nvim' -- Package manager
-	use {'dracula/vim', as = 'dracula'}
 	use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
+
 	use 'neovim/nvim-lspconfig' -- use a language server
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
@@ -29,10 +29,18 @@ require('packer').startup(function()
 	use 'saadparwaiz1/cmp_luasnip' -- vim cmp requires luasnip
 	use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
+	-- Highlight, edit, and navigate code using a fast incremental parsing library
+	use 'nvim-treesitter/nvim-treesitter'
+
 	use 'crispgm/nvim-go'
-	use 'nvim-lua/plenary.nvim'
 	use 'nvim-lua/popup.nvim'
 
+	use {
+	  'nvim-telescope/telescope.nvim',
+	  requires = { {'nvim-lua/plenary.nvim'} }
+	}
+
+	-- linting
 	use 'jose-elias-alvarez/null-ls.nvim'
 end)
 
@@ -40,23 +48,11 @@ if os.getenv('INSTALL') then
   goto eof
 end
 
---Incremental live completion (note: this is now a default on master)
-vim.o.inccommand = 'nosplit'
+--Set leader to space key
+vim.g.mapleader = ' '
 
 --Set highlight on search
 vim.o.hlsearch = false
-
---Make line numbers default
-vim.wo.number = true
-
---Do not save when switching buffers (note: this is now a default on master)
-vim.o.hidden = true
-
---Enable mouse mode
-vim.o.mouse = 'a'
-
---Enable break indent
-vim.o.breakindent = true
 
 --Save undo history
 vim.opt.undofile = true
@@ -65,16 +61,21 @@ vim.opt.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
---Decrease update time
-vim.o.updatetime = 250
-vim.wo.signcolumn = 'yes'
-
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
-vim.cmd [[colorscheme dracula]]
 
+vim.api.nvim_exec([[
+set list listchars=nbsp:¬,tab:»·,trail:·,extends:>
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set wildmode=longest,list,full
+set wildmenu
+]], true)
+
+require('findstuff')
 require('lsp')
+require('treesitter')
 require('null')
-
 
 ::eof::

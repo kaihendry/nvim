@@ -19,6 +19,8 @@ RUN yay --cachedir /tmp -Syu --noconfirm \
 	nodejs \
 	npm \
 	jq \
+	fd \
+	ripgrep \
 	neovim-nightly-bin \
 	write-good \
 	typescript-language-server-bin \
