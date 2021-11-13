@@ -1,4 +1,4 @@
-FROM archlinux
+FROM oblique/archlinux-yay
 LABEL maintainer="hendry@iki.fi"
 
 ARG COMMIT=""
@@ -7,13 +7,7 @@ RUN useradd -m dev
 RUN echo "dev ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN sed -i "s/#Color/Color/" /etc/pacman.conf
 
-RUN pacman -Syu --needed --noconfirm git sudo base-devel
-
 USER dev
-
-RUN cd /tmp && git clone https://aur.archlinux.org/yay.git \
-  && cd yay \
-  && makepkg -sri --needed --noconfirm
 
 RUN yay --cachedir /tmp -Syu --noconfirm \
 	nodejs \

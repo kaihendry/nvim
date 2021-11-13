@@ -10,6 +10,9 @@ run:
 	  $(IMAGE)
 .PHONY: run
 
+diff:
+	colordiff -r ~/.config/nvim/. nvim
+
 sync:
 	cp -r ~/.config/nvim/. nvim
 .PHONY: sync
