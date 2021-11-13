@@ -1,13 +1,22 @@
-FROM oblique/archlinux-yay
+FROM archlinux:base
 LABEL maintainer="hendry@iki.fi"
 
 ARG COMMIT=""
 
 RUN useradd -m dev
 RUN echo "dev ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-RUN sed -i "s/#Color/Color/" /etc/pacman.conf
+
+RUN pacman -Sy --noconfirm git sudo fakeroot binutils
 
 USER dev
+
+WORKDIR /tmp
+
+RUN curl https://aur.archlinux.org/cgit/aur.git/snapshot/yay-bin.tar.gz --output yay-bin.tar.gz && \
+    tar -xzf yay-bin.tar.gz && \
+    cd yay-bin && \
+    makepkg -ci --noconfirm && \
+    rm -rf yay-bin.tar.gz yay-bin
 
 RUN yay --cachedir /tmp -Syu --noconfirm \
 	nodejs \
