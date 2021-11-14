@@ -20,6 +20,13 @@ require('packer').startup(function()
 	use 'wbthomason/packer.nvim' -- Package manager
 	use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
 
+	use 'Mofiqul/dracula.nvim'
+
+	use "folke/which-key.nvim"
+
+	use 'tpope/vim-fugitive' -- Git commands in nvim
+	use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
+
 	use 'neovim/nvim-lspconfig' -- use a language server
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
@@ -29,7 +36,9 @@ require('packer').startup(function()
 	use 'saadparwaiz1/cmp_luasnip' -- vim cmp requires luasnip
 	use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
-	use 'crispgm/nvim-go'
+	use 'nvim-treesitter/nvim-treesitter'
+
+	-- use 'crispgm/nvim-go'
 	use 'nvim-lua/popup.nvim'
 
 	use {
@@ -68,10 +77,16 @@ set softtabstop=4
 set tabstop=4
 set wildmode=longest,list,full
 set wildmenu
+autocmd ColorScheme * highlight Whitespace ctermfg=red guifg=#FF0000
+colorscheme dracula
 ]], true)
 
 require('findstuff')
 require('lsp')
 require('null')
+require('treesitter')
+
+-- Setup https://github.com/folke/which-key.nvim
+require'which-key'.setup{}
 
 ::eof::

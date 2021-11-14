@@ -6,7 +6,7 @@ ARG COMMIT=""
 RUN useradd -m dev
 RUN echo "dev ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-RUN pacman -Sy --noconfirm git sudo fakeroot binutils
+RUN pacman -Sy --noconfirm git sudo base-devel
 
 USER dev
 
@@ -32,7 +32,8 @@ RUN yay --cachedir /tmp -Syu --noconfirm \
 
 COPY --chown=dev:dev nvim /home/dev/.config/nvim
 
-RUN INSTALL=1 nvim --headless +'autocmd User PackerComplete sleep 100m | qall' +PackerSync
+RUN INSTALL=1 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' && \
+    nvim --headless -c 'TSInstallSync maintained' -c 'q'
 
 COPY --chown=dev:dev bashrc /home/dev/.bashrc
 
