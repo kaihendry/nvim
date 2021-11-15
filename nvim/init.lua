@@ -33,10 +33,8 @@ require('packer').startup(function()
 	use 'hrsh7th/nvim-cmp' -- for completion whilst using the language server
 	use 'github/copilot.vim' -- for AI completion
 
-	use 'saadparwaiz1/cmp_luasnip' -- vim cmp requires luasnip
-	use 'L3MON4D3/LuaSnip' -- Snippets plugin
-
-	use 'nvim-treesitter/nvim-treesitter'
+	use {'hrsh7th/vim-vsnip', after = 'nvim-cmp'}
+	use { 'hrsh7th/cmp-vsnip', after = 'vim-vsnip' }
 
 	-- use 'crispgm/nvim-go'
 	use 'nvim-lua/popup.nvim'
@@ -46,8 +44,6 @@ require('packer').startup(function()
 	  requires = { {'nvim-lua/plenary.nvim'} }
 	}
 
-	-- linting
-	use 'jose-elias-alvarez/null-ls.nvim'
 end)
 
 if os.getenv('INSTALL') then
@@ -83,7 +79,7 @@ colorscheme dracula
 
 require('findstuff')
 require('lsp')
-require('null')
+require('nvim-cmp')
 
 -- Setup https://github.com/folke/which-key.nvim
 require'which-key'.setup{}
