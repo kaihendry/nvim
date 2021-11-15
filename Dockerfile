@@ -1,44 +1,25 @@
-FROM archlinux:base
-LABEL maintainer="hendry@iki.fi"
+FROM quay.io/nvim-lsp/try.nvim:base-nightly
 
-ARG COMMIT=""
+# https://github.com/nvim-lsp/try.nvim/blob/master/typescript/Dockerfile
 
-RUN useradd -m dev
-RUN echo "dev ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN apk --no-cache add nodejs git npm ripgrep fd bash
 
-RUN pacman -Sy --noconfirm git sudo base-devel
+# https://github.com/lourenci/docker/tree/master/images/neovim-ide
 
-USER dev
+# TODO setup yaml-language-server 
+# https://www.reddit.com/r/neovim/comments/pta1ka/unable_to_configure_yamllanguageserver/
+RUN npm i -g typescript typescript-language-server vscode-langservers-extracted yaml-language-server \
+  dockerfile-language-server-nodejs diagnostic-languageserver && \
+  npm cache clean --force
 
-WORKDIR /tmp
+COPY nvim /root/.config/nvim
 
-RUN curl https://aur.archlinux.org/cgit/aur.git/snapshot/yay-bin.tar.gz --output yay-bin.tar.gz && \
-    tar -xzf yay-bin.tar.gz && \
-    cd yay-bin && \
-    makepkg -ci --noconfirm && \
-    rm -rf yay-bin.tar.gz yay-bin
+RUN INSTALL=1 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
-RUN yay --cachedir /tmp -Syu --noconfirm \
-	nodejs \
-	npm \
-	jq \
-	fd \
-	ripgrep \
-	neovim-nightly-bin \
-	write-good \
-	typescript-language-server-bin \
-	yamllint \
-	&& sudo rm -rf /tmp/*
-
-COPY --chown=dev:dev nvim /home/dev/.config/nvim
-
-RUN INSTALL=1 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' && \
-    nvim --headless -c 'TSInstallSync maintained' -c 'q'
-
-COPY --chown=dev:dev bashrc /home/dev/.bashrc
-
-WORKDIR /src
+COPY bashrc /root/.bashrc
 
 ENV COMMIT=${COMMIT}
 
-ENTRYPOINT [ "bash" ]
+WORKDIR /src
+
+ENTRYPOINT ["nvim"]

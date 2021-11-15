@@ -3,12 +3,14 @@ Map leader key is <kbd>Space</kbd>
 # Goal
 
 1. Reproduce my https://github.com/kaihendry/dotfiles/tree/master/.config/nvim
-2. Have fun.
+2. Have fun!
 
 # How to run from bash
 
 Setup an alias:
 
-	alias hen='f(){ docker run -it --rm -v $(pwd):/src hendry/nvim; unset -f f; }; f'
+	alias n='docker run -it --rm -v $(pwd):/src hendry/nvim:latest $@'
 
-Type `hen` to drop you into my editing environment!
+or to invoke a shell:
+
+	docker run -it --rm --entrypoint=bash -v $(pwd):/src hendry/nvim:latest
