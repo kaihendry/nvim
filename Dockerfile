@@ -1,4 +1,7 @@
 FROM quay.io/nvim-lsp/try.nvim:base-nightly
+LABEL maintainer="hendry@iki.fi"
+
+ARG COMMIT=""
 
 # https://github.com/nvim-lsp/try.nvim/blob/master/typescript/Dockerfile
 
@@ -6,7 +9,8 @@ RUN apk --no-cache add nodejs git npm ripgrep fd bash
 
 # https://github.com/lourenci/docker/tree/master/images/neovim-ide
 
-# TODO setup yaml-language-server 
+# TODO setup yaml-language-server & eslint
+# https://github.com/lourenci/dotfiles/blob/main/nvim/lua/config/nvim-lsp.lua
 # https://www.reddit.com/r/neovim/comments/pta1ka/unable_to_configure_yamllanguageserver/
 RUN npm i -g typescript typescript-language-server vscode-langservers-extracted yaml-language-server \
   dockerfile-language-server-nodejs diagnostic-languageserver && \
