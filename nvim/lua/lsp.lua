@@ -1,3 +1,4 @@
+-- stolen from https://github.com/lourenci/dotfiles/blob/main/nvim/lua/config/nvim-lsp.lua
 local lspconfig = require'lspconfig'
 
 local flags = { debounce_text_changes = 150 }

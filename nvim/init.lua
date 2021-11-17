@@ -28,6 +28,7 @@ require('packer').startup(function()
 	use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
 
 	use 'neovim/nvim-lspconfig' -- use a language server
+	use 'williamboman/nvim-lsp-installer'
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/nvim-cmp' -- for completion whilst using the language server
