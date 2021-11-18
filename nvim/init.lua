@@ -22,8 +22,6 @@ require('packer').startup(function()
 
 	use 'Mofiqul/dracula.nvim'
 
-	use "folke/which-key.nvim"
-
 	use 'tpope/vim-fugitive' -- Git commands in nvim
 	use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
 
@@ -76,13 +74,11 @@ set wildmode=longest,list,full
 set wildmenu
 autocmd ColorScheme * highlight Whitespace ctermfg=red guifg=#FF0000
 colorscheme dracula
+map <F8> :setlocal spell! spelllang=en_gb<CR>
 ]], true)
 
 require('findstuff')
 require('lsp')
 require('nvim-cmp')
-
--- Setup https://github.com/folke/which-key.nvim
-require'which-key'.setup{}
 
 ::eof::

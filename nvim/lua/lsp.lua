@@ -1,7 +1,6 @@
--- stolen from https://github.com/lourenci/dotfiles/blob/main/nvim/lua/config/nvim-lsp.lua
-local lspconfig = require'lspconfig'
-
-local flags = { debounce_text_changes = 150 }
+-- Setup language servers managed by nvim-lsp-installer
+-- https://github.com/williamboman/nvim-lsp-installer#setup
+local lsp_installer = require("nvim-lsp-installer")
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -26,6 +25,7 @@ local on_attach = function (client, bufnr, formatting)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap("n", "<leader>li", "<cmd>LspInfo<CR>", opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
@@ -40,112 +40,18 @@ local on_attach = function (client, bufnr, formatting)
   buf_set_keymap('v', '<leader>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', opts)
 end
 
-lspconfig.tsserver.setup{
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr, false)
-  end,
-  flags = flags,
-  capabilities = capabilities,
-}
-lspconfig.cssls.setup{
-  on_attach = on_attach,
-  flags = flags,
-  capabilities = capabilities,
-}
-lspconfig.jsonls.setup{
-  on_attach = on_attach,
-  settings = {
-    json = {
-      schemas = {
-        {
-          description = 'Renovate',
-          fileMatch = {'renovate.json'},
-          url = 'https://docs.renovatebot.com/renovate-schema.json'
-        },
-        {
-          description = 'JSON schema for NPM package.json files',
-          fileMatch = {'package.json'},
-          url = 'https://json.schemastore.org/package.json'
-        },
-        {
-          description = 'TypeScript compiler configuration file',
-          fileMatch = {'tsconfig.json', 'tsconfig.*.json'},
-          url = 'https://json.schemastore.org/tsconfig'
-        },
-        {
-          description = 'Lerna config',
-          fileMatch = {'lerna.json'},
-          url = 'https://json.schemastore.org/lerna'
-        },
-        {
-          description = 'Babel configuration',
-          fileMatch = {'.babelrc.json', '.babelrc', 'babel.config.json'},
-          url = 'https://json.schemastore.org/lerna'
-        },
-        {
-          description = 'ESLint config',
-          fileMatch = {'.eslintrc.json', '.eslintrc'},
-          url = 'https://json.schemastore.org/eslintrc'
-        },
-        {
-          description = 'Prettier config',
-          fileMatch = {'.prettierrc', '.prettierrc.json', 'prettier.config.json'},
-          url = 'https://json.schemastore.org/prettierrc'
-        },
-        {
-          description = 'Vercel Now config',
-          fileMatch = {'now.json'},
-          url = 'https://json.schemastore.org/now'
-        },
-      }
-    },
-  },
-  flags = flags,
-  capabilities = capabilities,
-}
-lspconfig.gopls.setup{
-  on_attach = on_attach,
-  flags = flags,
-  capabilities = capabilities,
-  init_options = {
-    usePlaceholders = true,
-  }
-}
-lspconfig.yamlls.setup{
-  on_attach = on_attach,
-  settings = {
-    yaml = {
-      schemas = {
-        ['https://json.schemastore.org/github-workflow'] = '.github/workflows/*.{yml,yaml}',
-        ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] = 'docker-compose.yml',
-      }
-    }
-  },
-  flags = flags,
-  capabilities = capabilities,
-}
-lspconfig.dockerls.setup{
-  on_attach = on_attach,
-  flags = flags,
-  capabilities = capabilities,
-}
-lspconfig.solargraph.setup{
-  on_attach = on_attach,
-  flags = flags,
-  settings = {
-    solargraph = {
-      useBundler = true
-    }
-  },
-  capabilities = capabilities,
-}
-lspconfig.html.setup{
-  on_attach = on_attach,
-  flags = flags,
-  capabilities = capabilities,
-}
-lspconfig.eslint.setup{
-  on_attach = on_attach,
-  flags = flags,
-  capabilities = capabilities,
-}
+lsp_installer.on_server_ready(function(server)
+	local opts = { on_attach = on_attach, capabilities = capabilities }
+
+  if server.name == 'tsserver' then
+    opts.on_attach = function (client, bufnr)
+      on_attach(client, bufnr)
+      client.resolved_capabilities.document_formatting = false
+      client.resolved_capabilities.document_range_formatting = false
+    end
+  end
+
+    server:setup(opts)
+end)
+
+

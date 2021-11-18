@@ -15,6 +15,7 @@ diff:
 
 sync:
 	cp -r ~/.config/nvim/. nvim
+	rm -r nvim/plugin/
 .PHONY: sync
 
 # update the docker image
