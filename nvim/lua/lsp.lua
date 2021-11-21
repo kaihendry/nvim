@@ -11,13 +11,19 @@ local on_attach = function (client, bufnr, formatting)
 
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  local document_formatting = true
-  if formatting ~= nil then
-    document_formatting = formatting
-  end
-  client.resolved_capabilities.document_formatting = document_formatting
-
+  -- Set some keybinds conditional on server capabilities
   local opts = { noremap=true, silent=true }
+  if client.resolved_capabilities.document_formatting then
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+    vim.api.nvim_exec([[
+      augroup lsp_format_on_save
+        autocmd! BufWrite <buffer> lua vim.lsp.buf.formatting()
+      augroup END
+    ]], false)
+  elseif client.resolved_capabilities.document_range_formatting then
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+  end
+
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   -- Defaults from https://github.com/neovim/nvim-lspconfig#keybindings-and-completion
@@ -42,16 +48,7 @@ end
 
 lsp_installer.on_server_ready(function(server)
 	local opts = { on_attach = on_attach, capabilities = capabilities }
-
-  if server.name == 'tsserver' then
-    opts.on_attach = function (client, bufnr)
-      on_attach(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
-    end
-  end
-
-    server:setup(opts)
+	server:setup(opts)
 end)
 
 
