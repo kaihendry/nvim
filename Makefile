@@ -1,7 +1,6 @@
 PRJSRC=$(shell pwd)
 IMAGE=hendry/nvim
 
-# alias je='f(){ docker run -it --rm -v $(pwd):/proj hendry/nvim; unset -f f; }; f'
 run:
 	docker container run --rm --interactive  \
 	  --tty \
