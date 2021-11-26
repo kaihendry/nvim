@@ -10,6 +10,7 @@ RUN apk --no-cache add nodejs git npm ripgrep fd bash shellcheck go shfmt
 
 RUN npm install -g \
 	eslint \
+	write-good \
 	prettier && npm cache clean --force
 
 COPY nvim /root/.config/nvim
