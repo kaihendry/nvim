@@ -10,8 +10,6 @@ ls.config {
 		ls.builtins.diagnostics.write_good,
 		ls.builtins.diagnostics.yamllint,
 		ls.builtins.diagnostics.shellcheck,
-		ls.builtins.formatting.trim_newlines,
-		ls.builtins.formatting.trim_whitespace,
 	},
 	debug = true,
 }

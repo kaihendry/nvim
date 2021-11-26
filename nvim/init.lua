@@ -45,10 +45,6 @@ require('packer').startup(function()
 
  use {
     'jose-elias-alvarez/null-ls.nvim',
-    config = function()
-      require('null-ls').config {}
-      require('lspconfig')['null-ls'].setup {}
-    end,
     requires = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
   }
 
@@ -87,6 +83,7 @@ set tabstop=4
 set wildmode=longest,list,full
 set wildmenu
 autocmd ColorScheme * highlight Whitespace ctermfg=red guifg=#FF0000
+autocmd BufWritePre * :%s/\s\+$//e
 colorscheme dracula
 map <F8> :setlocal spell! spelllang=en_gb<CR>
 ]], true)
