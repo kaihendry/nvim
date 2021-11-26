@@ -58,22 +58,6 @@ end
 
 lsp_installer.on_server_ready(function(server)
 	local opts = { on_attach = on_attach, capabilities = capabilities }
-
-	if server.name == "efm" then
-		opts.filetypes = {"sh"}
-		opts.settings = {
-			languages = {
-				sh = {
-					-- shellcheck
-					{
-						lintCommand = "shellcheck -f gcc -x",
-						lintFormats = {"%f:%l:%c: error: %m", "%f:%l:%c: note: %m", "%f:%l:%c: warning: %m"}
-					}
-				}
-			}
-		}
-	end
-
 	server:setup(opts)
 end)
 
