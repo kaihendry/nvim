@@ -93,4 +93,8 @@ require('lsp')
 require('nvim-cmp')
 require('null')
 
+vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+
 ::eof::
+
+

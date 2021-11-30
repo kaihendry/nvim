@@ -7,6 +7,7 @@ ls.config {
 		ls.builtins.formatting.shfmt,
 		ls.builtins.formatting.prettier,
 		ls.builtins.formatting.eslint,
+		ls.builtins.formatting.goimports,
 		ls.builtins.diagnostics.write_good,
 		ls.builtins.diagnostics.yamllint,
 		ls.builtins.diagnostics.shellcheck,
