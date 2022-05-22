@@ -1,4 +1,4 @@
-FROM quay.io/nvim-lsp/try.nvim:base-nightly
+FROM node:16-alpine
 LABEL maintainer="hendry@iki.fi"
 
 ARG COMMIT=""
@@ -6,7 +6,12 @@ ARG COMMIT=""
 # https://github.com/nvim-lsp/try.nvim/blob/master/typescript/Dockerfile
 
 # https://pkgs.alpinelinux.org/packages
-RUN apk --no-cache add nodejs git npm ripgrep fd bash shellcheck go shfmt
+RUN apk --no-cache add git npm ripgrep fd bash shellcheck go shfmt gzip
+
+RUN apk add neovim --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+
+RUN git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+	~/.local/share/nvim/site/pack/packer/start/packer.nvim
 
 RUN npm install -g \
 	eslint \
