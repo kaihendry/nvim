@@ -2,31 +2,25 @@
 -- https://github.com/williamboman/nvim-lsp-installer#setup
 local lsp_installer = require("nvim-lsp-installer")
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local servers = require("servers")
 
-local on_attach = function (client, bufnr, formatting)
+local on_attach = function(client, bufnr, formatting)
 
 	local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+
 	local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
 	buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
 	-- Set some keybinds conditional on server capabilities
-	local opts = { noremap=true, silent=true }
+	local opts = { noremap = true, silent = true }
 
 
-	if (client.name == 'tsserver') or (client.name == 'gopls') then
-		client.resolved_capabilities.document_formatting = false
-		client.resolved_capabilities.document_range_formatting = false
-	elseif client.name == 'eslint' then
-		client.resolved_capabilities.document_formatting = true
-	end
-
-	if client.resolved_capabilities.document_formatting then
+	if client.server_capabilities.documentFormattingProvider then
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-	elseif client.resolved_capabilities.document_range_formatting then
+	elseif client.server_capabilities.document_range_formatting then
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
 	end
 
@@ -56,10 +50,8 @@ lsp_installer.on_server_ready(function(server)
 	local opts = { on_attach = on_attach, capabilities = capabilities }
 
 	if servers[server.name] ~= nil then
-	opts = vim.tbl_deep_extend('force', opts, servers[server.name])
+		opts = vim.tbl_deep_extend('force', opts, servers[server.name])
 	end
 
 	server:setup(opts)
 end)
-
-

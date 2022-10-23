@@ -24,6 +24,8 @@ require("packer").startup(function()
 
 	use("tpope/vim-fugitive") -- I only use :0Gclog
 
+	use("ggandor/leap.nvim") -- https://github.com/ggandor/leap.nvim
+
 	use("neovim/nvim-lspconfig") -- use a language server
 	use("williamboman/nvim-lsp-installer")
 	use("hrsh7th/cmp-nvim-lsp")
@@ -105,6 +107,7 @@ require("findstuff")
 require("lsp")
 require("nvim-cmp")
 require("null")
+require('leap').set_default_keymaps()
 
 vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
 

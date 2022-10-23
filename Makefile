@@ -10,7 +10,7 @@ run:
 .PHONY: run
 
 diff:
-	colordiff -r ~/.config/nvim/. nvim
+	diff -x plugin -ur ~/.config/nvim/ nvim
 
 sync:
 	cp -r ~/.config/nvim/. nvim
